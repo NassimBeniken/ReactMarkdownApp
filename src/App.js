@@ -11,6 +11,24 @@ class App extends React.Component {
     }
   }
 
+  componentDidMount() {
+    const savedText = localStorage.getItem("text")
+    if (savedText) {
+      this.setState({
+        text: savedText
+    })
+    } else {
+      this.setState({
+        text: sampleText
+      })
+    }
+  }
+
+  componentDidUpdate() {
+    const text = this.state.text
+    localStorage.setItem("text", text)
+  }
+
   render() {
     return (
       <div className="container">
@@ -23,7 +41,7 @@ class App extends React.Component {
               rows="35"/>
           </div>
           <div className="col-sm-6">
-            <div dangerouslySetInnerHTML={this.renderText(this.state.text)}/>
+            <div dangerouslySetInnerHTML={{ __html: this.renderText(this.state.text)}}/>
           </div>
         </div>
       </div>
@@ -37,8 +55,7 @@ class App extends React.Component {
   }
 
   renderText = (text) => {
-    const __html = marked(text, { sanitize: true})
-    return { __html }
+    return marked(text, { sanitize: true})
   }
   
 }
